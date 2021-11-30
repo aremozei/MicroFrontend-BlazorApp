@@ -1,0 +1,30 @@
+﻿@using System.Reflection
+@inject LazyAssemblyLoader AssemblyLoader
+
+<Router AppAssembly="@typeof(Program).Assembly"
+        OnNavigateAsync="@OnNavigateAsync"
+        AdditionalAssemblies="@LoadedAssemblies"
+        PreferExactMatches="@true">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code{
+    private List<Assembly> LoadedAssemblies = new List<Assembly>();
+
+    private async Task OnNavigateAsync(NavigationContext context)
+    {
+        // Url of the page that needs the lazy loaded assembly
+        if (context.Path == "LoadTestComponent")
+        {
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { "LoadTest.dll" });
+            LoadedAssemblies.AddRange(assemblies);
+        }
+    }
+}
