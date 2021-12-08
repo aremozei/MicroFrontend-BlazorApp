@@ -1,12 +1,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
 WORKDIR /LoadTest
 COPY /LoadTest/LoadTest.csproj .
 RUN dotnet restore "LoadTest.csproj"
 COPY /LoadTest /LoadTest/
+
+WORKDIR /ChatBox
+COPY /ChatBox/ChatBox.csproj .
+RUN dotnet restore "ChatBox.csproj"
+COPY /ChatBox /ChatBox/
+
 WORKDIR /MicroWasm
-RUN dotnet restore "MicroWasm.csproj"
 COPY /MicroWasm/MicroWasm.csproj .
+RUN dotnet restore "MicroWasm.csproj"
 COPY /MicroWasm /MicroWasm
+
 RUN dotnet build "MicroWasm.csproj" -c Release -o ./app/build
 
 FROM build AS publish
