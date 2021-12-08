@@ -26,5 +26,10 @@
             var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { "LoadTest.dll" });
             LoadedAssemblies.AddRange(assemblies);
         }
+        if (context.Path == "ChatBoxComponent")
+        {
+            var assemblies = await AssemblyLoader.LoadAssembliesAsync(new List<string> { "ChatBox.dll" });
+            LoadedAssemblies.AddRange(assemblies);
+        }
     }
 }
